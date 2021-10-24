@@ -4,6 +4,7 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BoardRepository } from './board.repository';
 import { Board } from './board.entity';
+import { BoardStatus } from './board-status.enum';
 
 // 주로 데이터베이스 로직
 // CRUD
@@ -29,6 +30,24 @@ export class BoardsService {
 
   createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
     return this.boardRepository.createBoard(createBoardDto);
+  }
+
+  // remove() vs delete()
+  // remove : 무조건 존재하는 아이템을 지워야지 에러가 나지 않는다 ( 404 )
+  // delete : 있으면 지우고, 존재하지 않아도 영향이 없음
+  async deleteBoard(id: number): Promise<void> {
+    const result = await this.boardRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Can not find Board with id ${id}`);
+    }
+  }
+
+  async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
+    const board = await this.getBoardById(id);
+    board.status = status;
+    await this.boardRepository.save(board);
+
+    return board;
   }
 }
 
