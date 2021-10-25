@@ -17,3 +17,12 @@ brew services start postgresql
 $ psql postgres
 postgres=# \du
 ```
+
+-----
+### Moddule, Controller, Service 생성  
+( 테스트 코드 옵션 제외 )
+```
+nest g module auth
+nest g controller auth --no-spec
+nest g service auth --no-spec
+```
