@@ -29,6 +29,11 @@ export class BoardsController {
    */
   constructor(private boardService: BoardsService) {}
 
+  @Get()
+  getAllBoard(): Promise<Board[]> {
+    return this.boardService.getAllBoards();
+  }
+
   @Get('/:id')
   getBoardById(@Param('id') id: number): Promise<Board> {
     return this.boardService.getBoardById(id);

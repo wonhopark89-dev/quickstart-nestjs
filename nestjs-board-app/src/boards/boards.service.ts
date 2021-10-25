@@ -18,6 +18,10 @@ export class BoardsService {
     private boardRepository: BoardRepository,
   ) {}
 
+  async getAllBoards(): Promise<Board[]> {
+    return this.boardRepository.find();
+  }
+
   // async / await -> 데이터베이스 작업이 끝난 후 결과값을 반환
   async getBoardById(id: number): Promise<Board> {
     const found = await this.boardRepository.findOne(id);
