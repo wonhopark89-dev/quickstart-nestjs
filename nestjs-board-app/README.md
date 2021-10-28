@@ -26,3 +26,17 @@ nest g module auth
 nest g controller auth --no-spec
 nest g service auth --no-spec
 ```
+
+### 각각의 미들웨어 불러지는 ( called ) 순서
+```
+middleware 
+-> guard 
+-> interceptor(before) 
+-> pipe
+-> controller
+-> service
+-> controller
+-> interceptor(after)
+-> filter(if applicable)
+-> client
+```
