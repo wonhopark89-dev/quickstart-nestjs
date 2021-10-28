@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BoardRepository } from './board.repository';
 import { Board } from './board.entity';
 import { BoardStatus } from './board-status.enum';
+import { User } from '../auth/user.entity';
 
 // 주로 데이터베이스 로직
 // CRUD
@@ -32,8 +33,8 @@ export class BoardsService {
     return found;
   }
 
-  createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
-    return this.boardRepository.createBoard(createBoardDto);
+  createBoard(createBoardDto: CreateBoardDto, user: User): Promise<Board> {
+    return this.boardRepository.createBoard(createBoardDto, user);
   }
 
   // remove() vs delete()

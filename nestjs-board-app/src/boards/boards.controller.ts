@@ -17,6 +17,8 @@ import { Board } from './board.entity';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 import { BoardStatus } from './board-status.enum';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.entity';
 
 @Controller('boards')
 @UseGuards(AuthGuard()) // Controller 레벨로 지정해야 모든 Handler 에 적용된다.
@@ -42,10 +44,14 @@ export class BoardsController {
     return this.boardService.getBoardById(id);
   }
 
+  // Board 생성 시 User 정보도 넣을 수 있도록 설정
   @Post('/')
   @UsePipes(ValidationPipe) // handler-level pipes
-  createBoard(@Body() createBoardDto: CreateBoardDto): Promise<Board> {
-    return this.boardService.createBoard(createBoardDto);
+  createBoard(
+    @Body() createBoardDto: CreateBoardDto,
+    @GetUser() user: User,
+  ): Promise<Board> {
+    return this.boardService.createBoard(createBoardDto, user);
   }
 
   @Delete('/:id')
