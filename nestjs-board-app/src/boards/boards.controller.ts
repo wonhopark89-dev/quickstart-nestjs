@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   ParseIntPipe,
   Patch,
@@ -23,6 +24,8 @@ import { User } from '../auth/user.entity';
 @Controller('boards')
 @UseGuards(AuthGuard()) // Controller 레벨로 지정해야 모든 Handler 에 적용된다.
 export class BoardsController {
+  private logger = new Logger('BoardController'); // log prefix
+
   // boardService: BoardsService;
   // constructor(boardService: BoardsService) {
   //   this.boardService = boardService;
@@ -37,6 +40,7 @@ export class BoardsController {
   // 내가 작성한 게시판 목록만 가져오도록 설정
   @Get()
   getAllBoard(@GetUser() user: User): Promise<Board[]> {
+    this.logger.verbose(`User ${user.username} trying to get all boards`);
     return this.boardService.getAllBoards(user);
   }
 
@@ -52,6 +56,11 @@ export class BoardsController {
     @Body() createBoardDto: CreateBoardDto,
     @GetUser() user: User,
   ): Promise<Board> {
+    this.logger.verbose(
+      `User ${user.username} creating a new board. Payload: ${JSON.stringify(
+        createBoardDto,
+      )}`,
+    );
     return this.boardService.createBoard(createBoardDto, user);
   }
 
