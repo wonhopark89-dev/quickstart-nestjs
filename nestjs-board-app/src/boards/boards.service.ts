@@ -45,8 +45,9 @@ export class BoardsService {
   // remove() vs delete()
   // remove : 무조건 존재하는 아이템을 지워야지 에러가 나지 않는다 ( 404 )
   // delete : 있으면 지우고, 존재하지 않아도 영향이 없음
-  async deleteBoard(id: number): Promise<void> {
-    const result = await this.boardRepository.delete(id);
+  /// User 정보로 내가 작성한 것만 삭제가 가능하도록 설정
+  async deleteBoard(id: number, user: User): Promise<void> {
+    const result = await this.boardRepository.delete({ id, user });
     if (result.affected === 0) {
       throw new NotFoundException(`Can not find Board with id ${id}`);
     }
