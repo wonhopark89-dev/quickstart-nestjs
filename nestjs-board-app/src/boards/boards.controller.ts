@@ -34,9 +34,10 @@ export class BoardsController {
    */
   constructor(private boardService: BoardsService) {}
 
+  // 내가 작성한 게시판 목록만 가져오도록 설정
   @Get()
-  getAllBoard(): Promise<Board[]> {
-    return this.boardService.getAllBoards();
+  getAllBoard(@GetUser() user: User): Promise<Board[]> {
+    return this.boardService.getAllBoards(user);
   }
 
   @Get('/:id')

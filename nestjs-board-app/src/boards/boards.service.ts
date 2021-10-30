@@ -19,8 +19,13 @@ export class BoardsService {
     private boardRepository: BoardRepository,
   ) {}
 
-  async getAllBoards(): Promise<Board[]> {
-    return this.boardRepository.find();
+  async getAllBoards(user: User): Promise<Board[]> {
+    // return this.boardRepository.find();
+
+    const query = this.boardRepository.createQueryBuilder('board'); // table name
+    query.where('board.userId = :userId', { userId: user.id });
+    const boards = await query.getMany();
+    return boards;
   }
 
   // async / await -> 데이터베이스 작업이 끝난 후 결과값을 반환
