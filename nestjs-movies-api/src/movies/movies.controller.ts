@@ -1,10 +1,24 @@
-import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 
 @Controller('movies')
 export class MoviesController {
   @Get()
   getAll() {
     return 'This will return all movies';
+  }
+
+  @Get('search')
+  search(@Query('year') searchingYear: string) {
+    return `We are searching for a movie mode after: ${searchingYear}`;
   }
 
   @Get('/:id')
@@ -14,8 +28,9 @@ export class MoviesController {
   }
 
   @Post()
-  create() {
-    return `This will create a movie`;
+  create(@Body() movieData) {
+    // NestJS 는 JSON 포맷을 자동으로 인식할 수 있고, 리턴도 가능하다.
+    return movieData;
   }
 
   @Delete('/:id')
@@ -25,7 +40,10 @@ export class MoviesController {
 
   // Put vs Patch ( Patch 는 일부분만 업데이트 )
   @Patch('/:id')
-  path(@Param('id') movieId: string) {
-    return `This will patch a movie with id ${movieId}`;
+  path(@Param('id') movieId: string, @Body() updateData) {
+    return {
+      updateMovie: movieId,
+      ...updateData,
+    };
   }
 }
