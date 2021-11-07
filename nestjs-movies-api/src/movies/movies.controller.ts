@@ -34,15 +34,12 @@ export class MoviesController {
 
   @Delete('/:id')
   remove(@Param('id') movieId: string) {
-    return this.moviesService.deleteOne(movieId);
+    this.moviesService.deleteOne(movieId);
   }
 
   // Put vs Patch ( Patch 는 일부분만 업데이트 )
   @Patch('/:id')
   path(@Param('id') movieId: string, @Body() updateData) {
-    return {
-      updateMovie: movieId,
-      ...updateData,
-    };
+    return this.moviesService.update(movieId, updateData);
   }
 }
